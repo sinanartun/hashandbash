@@ -1,0 +1,8 @@
+{
+  "name": "hashandbash",
+  "version": "1.0.0",
+  "dependencies": {
+    "async": "^3.2.4",
+    "axios": "^0.27.2"
+  }
+}
