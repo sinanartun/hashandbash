@@ -1,6 +1,6 @@
-const axios =  require("axios");
-const async = require('async');
-const {map} = require("async");
+const async = require("async");
+const axios = require('axios');
+
 
 let hash_value =    "e10adc3949ba59abbe56e057f20f883e";
 let urls=[
@@ -17,14 +17,16 @@ let urls=[
 ];
 
 
+
+
+
 const run = function () {
-  async.waterfall([function (callback) {
-
-
+  let c = 0;
+  async.waterfall([
+    function (callback) {
 
 
       for (let i = 0;i < 10;i++) {
-
         axios.get(urls[i], {params: {hash: hash_value}})
           .then((response) => {
             console.log(urls[i]);
@@ -42,20 +44,25 @@ const run = function () {
       }
 
 
-    },
-    function (hashResult, callback) {
-
-      console.log(hashResult);
 
 
-        callback(null, hashResult);
 
 
 
     },
+    function (c, callback) {
+
+      console.log("c:"+c);
+
+
+      callback(null, c);
+
+
+
+    },
     function (hashResult, callback) {
 
-        callback(null,"finish")
+      callback(null,"finish")
 
 
     }
@@ -67,10 +74,54 @@ const run = function () {
       // run();
     } else {
       console.log(result);
-      
+
+
+
       // run();
     }
   });
 };
 
-run();
+
+exports.handler = async (event) => {
+
+  for (let i = 0;i < 10;i++) {
+
+
+
+    await axios.get(urls[i], {params: {hash: hash_value}})
+      .then((response) => {
+
+
+        // ans_list[i]=response.data;
+        //callback(addList,ans_list,sira);
+
+        if (response.data.toString() !== "-1" ) {
+          // callback(null,response.data);
+
+          console.log("sssssssssssssssss")
+          console.log(response.data)
+
+        }else{
+          console.log(response.data)
+        }
+      }).catch((err) => {
+        console.error(err);
+        // callback(err,null);
+      });
+
+    // const response = {
+    //     statusCode: 200,
+    //     body: JSON.stringify('Hello from Lambda!'),
+    // };
+    // return response;
+
+
+    // TODO implement
+    // const response = {
+    //     statusCode: 200,
+    //     body: JSON.stringify('Hello from Lambda!'),
+    // };
+    // return response;
+  }
+};
